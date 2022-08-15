@@ -12,7 +12,7 @@ enum Direction {
     Right,
 }
 
-/// Sir Bondrewd speaks
+/// ( |) < May your journey overflow with curses and blessings.
 #[derive(Parser)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
@@ -37,11 +37,13 @@ fn main() {
     let args = Args::parse();
     let bondrewd = create_face(&args);
 
+    // 引数が無い場合、標準入力から受け取る
     let text = match args.text {
         Some(v) => v,
         None => {
             let mut buf = String::new();
 
+            // EOFまで繰り返す
             while let Ok(byte) = io::stdin().read_line(&mut buf) {
                 if byte == 0 {
                     break;
@@ -59,6 +61,7 @@ fn main() {
     };
 }
 
+// 引数からお顔を作成
 fn create_face(args: &Args) -> String {
     let face = BONDREWD_FACES[args.direction as usize];
 
@@ -75,6 +78,7 @@ fn create_face(args: &Args) -> String {
     format!("{}{}{}", lefthand, face, righthand)
 }
 
+// 上にテキストを表示
 fn print_up(face: &String, text: &String) {
     let lines: Vec<&str> = text.split('\n').collect();
     let max_width = match lines.iter().map(|e| UnicodeWidthStr::width(*e)).max() {
@@ -109,6 +113,7 @@ fn print_up(face: &String, text: &String) {
     println!(" {}", face);
 }
 
+// 右にテキストを表示
 fn print_right(face: &String, text: &String) {
     let face_width = UnicodeWidthStr::width(face.as_str()) + 3;
     let lines: Vec<&str> = text.split('\n').collect();
