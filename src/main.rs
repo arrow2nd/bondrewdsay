@@ -16,7 +16,7 @@ enum Direction {
 #[derive(Parser)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
-    /// Text to display
+    /// Text to display (If omitted, standard input is accepted)
     #[clap(value_parser)]
     text: Option<String>,
 
